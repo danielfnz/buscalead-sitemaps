@@ -174,14 +174,12 @@ print(f"  sitemap-estados.xml ({len(UFS)} URLs)")
 # ===================== 4. SITEMAP CNAE =====================
 print("Gerando sitemaps de CNAEs...")
 
-# Buscar todos os codigos CNAE que tem empresas ativas
+# Buscar todos os codigos CNAE existentes
 cur.execute("""
-    SELECT DISTINCT e.cnae_fiscal_principal
-    FROM estabelecimentos e
-    WHERE e.situacao_cadastral = %s
-      AND e.cnae_fiscal_principal IS NOT NULL
-    ORDER BY e.cnae_fiscal_principal;
-""", (SITUACAO_ATIVA,))
+    SELECT codigo
+    FROM cnaes
+    ORDER BY codigo;
+""")
 
 cnae_codes = [row[0] for row in cur.fetchall()]
 print(f"  Encontrados {len(cnae_codes)} CNAEs com empresas ativas")
@@ -202,20 +200,11 @@ for i in range(0, len(cnae_codes), CHUNK_SIZE):
     print(f"  {filename} ({len(chunk)} URLs)")
 
 # ===================== 5. SITEMAP CNAE x UF =====================
-print("Gerando sitemaps de CNAE por estado...")
+print("Gerando sitemaps de CNAE por estado (todas as combinacoes)...")
 
-# Buscar combinacoes CNAE x UF que realmente existem
-cur.execute("""
-    SELECT DISTINCT e.cnae_fiscal_principal, LOWER(e.uf) as uf
-    FROM estabelecimentos e
-    WHERE e.situacao_cadastral = %s
-      AND e.cnae_fiscal_principal IS NOT NULL
-      AND e.uf IS NOT NULL
-    ORDER BY e.cnae_fiscal_principal, uf;
-""", (SITUACAO_ATIVA,))
-
-cnae_uf_pairs = cur.fetchall()
-print(f"  Encontradas {len(cnae_uf_pairs)} combinacoes CNAE x UF")
+# Gerar todas as combinacoes CNAE x UF
+cnae_uf_pairs = [(code, uf) for code in cnae_codes for uf in UFS]
+print(f"  Total: {len(cnae_uf_pairs)} combinacoes ({len(cnae_codes)} CNAEs x {len(UFS)} UFs)")
 
 # /consulta-cnae/:code/:uf — dividido em blocos de 20k
 for i in range(0, len(cnae_uf_pairs), CHUNK_SIZE):
