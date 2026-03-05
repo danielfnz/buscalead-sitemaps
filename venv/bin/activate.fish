@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV /media/desenvolvimento/dados/buscalead/sitemap-generator/venv
+set -gx VIRTUAL_ENV /home/daniel/Documentos/buscalead/buscalead-sitemaps/venv
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"bin $PATH

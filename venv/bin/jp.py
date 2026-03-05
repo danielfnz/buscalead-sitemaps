@@ -1,4 +1,4 @@
-#!/media/desenvolvimento/dados/buscalead/sitemap-generator/venv/bin/python3
+#!/home/daniel/Documentos/buscalead/buscalead-sitemaps/venv/bin/python3
 
 import sys
 import json

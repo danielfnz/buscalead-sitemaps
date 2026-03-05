@@ -25,7 +25,9 @@
            "planArn",
            "actualRecoveryTime",
            "version",
-           "mode"
+           "mode",
+           "generatedReportDetails",
+           "recoveryExecutionId"
          ]
       }
     }
